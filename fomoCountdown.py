@@ -3,10 +3,6 @@ import datetime
 from picamera import PiCamera
 from neopixel import *
 
-f = open('/home/pi/cron.txt','a')
-f.write('test\n')
-f.close()
-
 # LED strip configuration:
 LED_COUNT   = 8      # Number of LED pixels.
 LED_PIN     = 18      # GPIO pin connected to the pixels (must support PWM!).
@@ -20,14 +16,17 @@ def countdown(strip, color, wait_ms=500):
 		strip.show()
 		time.sleep(wait_ms/1000.0)
 
+def setAll(strip, color):
+	for i in range(strip.numPixels()):
+		strip.setPixelColor(i, color)
+	strip.show()
+
 def flashAll(strip, color, wait_ms=500):
 	for j in range(10):
 		if (j % 2 == 0):
-			for i in range(strip.numPixels()):
-				strip.setPixelColor(i, Color(0, 0, 0))
+			setAll(strip, Color(0, 0, 0))
 		else:
-			for i in range(strip.numPixels()):
-				strip.setPixelColor(i, Color(0, 255, 0))
+			setAll(strip, Color(0, 255, 0))
 		strip.show()
 		time.sleep(wait_ms/1000.0)
 
@@ -53,17 +52,13 @@ camera.start_preview()
 flashAll(strip, Color(0,255,0), 500)
 
 #Change strip color to indicate photo is being taken
-for i in range(strip.numPixels()):
-	strip.setPixelColor(i, Color(255, 0, 0))
-strip.show()		
+setAll(strip, Color(255, 0, 0))
 
 #Take picture
 camera.capture('mo/%s.jpg' % (datetime.datetime.now()))
 time.sleep(1)
 
 #Turn off all pixels
-for i in range(strip.numPixels()):
-	strip.setPixelColor(i, Color(0, 0, 0))
-strip.show()
+setAll(strip, Color(0, 0, 0))
 
 camera.close()
