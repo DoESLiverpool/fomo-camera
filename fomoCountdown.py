@@ -55,7 +55,27 @@ flashAll(strip, Color(0,255,0), 500)
 setAll(strip, Color(255, 0, 0))
 
 #Take picture
-camera.capture('mo/%s.jpg' % (datetime.datetime.now()))
+camera.capture('vivian/%s.jpg' % (datetime.datetime.now().strftime("%H:%M:00")))
+
+#Turn off all pixels
+setAll(strip, Color(0, 0, 0))
+
+time.sleep(17)
+
+#Inital countdown warning
+countdown(strip, Color(0, 255, 0), 1000)
+
+#warm up camera
+camera.start_preview()
+
+#Flash warning that photo is about to be taken
+flashAll(strip, Color(0,255,0), 500)
+
+#Change strip color to indicate photo is being taken
+setAll(strip, Color(255, 0, 0))
+
+#Take picture
+camera.capture('vivian/%s.jpg' % (datetime.datetime.now().strftime("%H:%M:30")))
 time.sleep(1)
 
 #Turn off all pixels
